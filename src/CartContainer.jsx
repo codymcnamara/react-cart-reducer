@@ -6,10 +6,6 @@ const CartContainer = () => {
   const { cart, clearCart } = useGlobalContext();
   const cartArray = Array.from(cart.entries());
 
-  const please = () =>{
-    debugger;
-  }
-
   if (cartArray.length === 0) {
     return (
       <section className='cart'>
