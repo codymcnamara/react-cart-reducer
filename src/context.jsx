@@ -23,12 +23,16 @@ function AppProvider ({children}){
     const [state, dispatch] = useReducer(reducer, initialState)
 
     const clearCart = () => {
-        debugger;
         dispatch({type: CLEAR_CART});
     }
 
+    const removeItem = (id) => {
+        // debugger;
+        dispatch({type: REMOVE, payload: {id}})
+    }
+
     return (
-        <AppContext.Provider value={{...state, clearCart}}>
+        <AppContext.Provider value={{...state, clearCart, removeItem}}>
             {children}
         </AppContext.Provider>
     )
