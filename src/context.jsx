@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from 'react';
+import { createContext, useContext, useEffect, useReducer } from 'react';
 import reducer from './reducer';
 import cartItems from './data';
 import { 
@@ -11,11 +11,13 @@ import {
 } from './actions';
 import { getTotals } from './utils';
 
+const url = 'https://www.course-api.com/react-useReducer-cart-project';
+
 const AppContext = createContext();
 
 const initialState = {
-    loading: false,
-    cart: new Map(cartItems.map((item) => [item.id, item])),
+    loading: true,
+    cart: [],
 }
 
 export const useGlobalContext = () => useContext(AppContext);
@@ -30,7 +32,6 @@ function AppProvider ({children}){
     }
 
     const removeItem = (id) => {
-        // debugger;
         dispatch({type: REMOVE, payload: {id}})
     }
 
@@ -40,6 +41,38 @@ function AppProvider ({children}){
     const decreaseItem = (id) => {
         dispatch({type: DECREASE, payload: {id}});
     }
+
+    async function fetchData() {
+        try {
+            let response = await fetch(url);
+            let cartItems = await response.json();
+            console.log(cartItems);
+        }catch {
+
+        }
+
+    }
+
+    async function fetchUrl() {
+        try {
+            dispatch({type: LOADING, payload: {loading: true}});
+            let response = await fetch(url);
+            let cartItems = await response.json();
+            console.log(cartItems);
+            let cart = new Map(cartItems.map((item) => [item.id, item]));
+        
+            dispatch({type: DISPLAY_ITEMS, payload: {cart}});
+            dispatch({type: LOADING, payload: {loading: false}});
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
+    useEffect(()=>{
+        fetchUrl();
+    }, []);
+    
+
 
     return (
         <AppContext.Provider value={{...state, clearCart, removeItem, increaseItem, decreaseItem, totalAmount, totalCost}}>

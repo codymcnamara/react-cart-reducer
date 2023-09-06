@@ -12,7 +12,6 @@ const reducer = (state, action) => {
     if(action.type === REMOVE){
         const newCart= new Map(state.cart);
         return {...state, cart: newCart };
-
     }
 
     if (action.type === CLEAR_CART){
@@ -41,6 +40,14 @@ const reducer = (state, action) => {
         }
 
         return {...state, cart: newCart };
+    }
+
+    if (action.type === DISPLAY_ITEMS) {
+        return {...state, cart: action.payload.cart};
+    }
+
+    if(action.type === LOADING){
+        return {...state, loading: action.payload.loading };
     }
     
     throw new Error(`No matching "${action.type}" - action type`);
