@@ -9,6 +9,7 @@ import {
     DISPLAY_ITEMS, 
     LOADING 
 } from './actions';
+import { getTotals } from './utils';
 
 const AppContext = createContext();
 
@@ -21,6 +22,8 @@ export const useGlobalContext = () => useContext(AppContext);
 
 function AppProvider ({children}){
     const [state, dispatch] = useReducer(reducer, initialState)
+
+    const {totalAmount, totalCost} = getTotals(state.cart);
 
     const clearCart = () => {
         dispatch({type: CLEAR_CART});
@@ -39,8 +42,8 @@ function AppProvider ({children}){
     }
 
     return (
-        <AppContext.Provider value={{...state, clearCart, removeItem, increaseItem, decreaseItem}}>
-            {children}
+        <AppContext.Provider value={{...state, clearCart, removeItem, increaseItem, decreaseItem, totalAmount, totalCost}}>
+            {children} 
         </AppContext.Provider>
     )
 }

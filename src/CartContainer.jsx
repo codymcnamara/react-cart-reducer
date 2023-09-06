@@ -3,15 +3,8 @@ import { useGlobalContext } from './context';
 import cartItems from './data';
 
 const CartContainer = () => {
-  const { cart, clearCart } = useGlobalContext();
+  const { cart, clearCart, totalCost } = useGlobalContext();
   const cartArray = Array.from(cart.entries());
-
-  let total = 0;
-  for (let [key, { name, price, amount }] of cart) {
-    console.log(key, name, price, amount); 
-    let itemTotal = amount * (Math.round(Number(price) * 100) / 100);
-    total += itemTotal
-  }
 
   if (cartArray.length === 0) {
     return (
@@ -42,7 +35,7 @@ const CartContainer = () => {
         <hr />
         <div>
           <h5 className='cart-total'>
-            total <span>{total}</span>
+            total <span>{totalCost}</span>
           </h5>
         </div>
         <button
